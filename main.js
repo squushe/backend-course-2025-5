@@ -27,12 +27,25 @@ let server = http.createServer(async (req, res) => {
   switch (method) {
     case "GET":
       try {
-        const workData = await fs.promises.readFile(filePath);
+        const data = await fs.promises.readFile(filePath);
         res.writeHead(200, { "Content-Type": "image/jpeg" });
-        res.end(workData);
+        res.end(data);
+        return;
       } catch {
-        res.writeHead(404);
-        res.end("Not Found");
+        try {
+          const resp = await superagent
+            .get(`https://http.cat/${code}.jpg`)
+            .buffer(true);
+          const img = resp.body;
+          await fs.promises.writeFile(filePath, img);
+          res.writeHead(200, { "Content-Type": "image/jpeg" });
+          res.end(img);
+          return;
+        } catch {
+          res.writeHead(404);
+          res.end("Not Found");
+          return;
+        }
       }
       break;
     case "PUT":
