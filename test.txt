@@ -1,3 +1,0 @@
-curl.exe -i -X PUT -H "Content-Type: image/jpeg" --data-binary "@image.jpg" http://127.0.0.1:3000/200
-curl -i http://127.0.0.1:3000/200 -o downloaded_200.jpg
-curl -i -X DELETE http://127.0.0.1:3000/200
